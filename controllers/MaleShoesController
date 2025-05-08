@@ -1,0 +1,30 @@
+const MaleShoesModel = require('../models/MaleShoesModel');
+
+const createMaleShoesDetails = (req, res) => {
+    const { brand, category, size, shoesId } = req.body;
+    
+    const maleShoes = new MaleShoesModel({brand, category, size, shoesId});
+
+    maleShoes.save().then((maleShoes) => {
+        if (maleShoes) {
+            res.json({message: 'Male shoes created successfully', maleShoes});
+        } else {
+            res.json("Failed to create male shoes");
+        }
+    })
+    .catch((err) => console.log(err))
+};
+
+const retrieveMaleShoesDetails = (req, res) => {
+    MaleShoesModel.find()
+    .populate("shoesId", "menShoes -_id")
+    .then((maleShoes) => {
+        if (maleShoes) {
+            res.json(maleShoes)
+        } else {
+            res.json("Failed to retrieve")
+        }
+    }).catch((err) => console.log(err)) 
+};
+
+module.exports = ({createMaleShoesDetails, retrieveMaleShoesDetails});
